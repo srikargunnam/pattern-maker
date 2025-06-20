@@ -43,7 +43,8 @@
     "expo-image": "~2.3.0",
     "expo-blur": "~14.1.5",
     "expo-haptics": "~14.1.4",
-    "expo-symbols": "~0.4.5"
+    "expo-symbols": "~0.4.5",
+    "react-native-gesture-handler": "~2.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

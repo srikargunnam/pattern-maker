@@ -3,16 +3,79 @@ import * as Print from "expo-print";
 import { useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { useRef } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import PatternSheet from "../../components/patterns/PatternSheet";
+
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
+
+const { width, height } = Dimensions.get("window");
 
 export default function PatternScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const supportedDesigns = ["boatneck", "v-neck", "square-neck", "round-neck"];
   const isSupported = id && supportedDesigns.includes(id);
 
-  const patternRef = useRef<View>(null);
+  const patternRef = useRef(null);
+
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+  const offsetX = useSharedValue(0);
+  const offsetY = useSharedValue(0);
+  const savedOffsetX = useSharedValue(0);
+  const savedOffsetY = useSharedValue(0);
+
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      // Reset zoom and pan
+      scale.value = 1;
+      savedScale.value = 1;
+
+      offsetX.value = 0;
+      offsetY.value = 0;
+      savedOffsetX.value = 0;
+      savedOffsetY.value = 0;
+    });
+
+  const panGesture = Gesture.Pan()
+    // .onBegin(() => {
+    //   savedOffsetX.value = offsetX.value;
+    //   savedOffsetY.value = offsetY.value;
+    // })
+    .onUpdate((e) => {
+      offsetX.value = savedOffsetX.value + e.translationX;
+      offsetY.value = savedOffsetY.value + e.translationY;
+    })
+    .onEnd(() => {
+      savedOffsetX.value = offsetX.value;
+      savedOffsetY.value = offsetY.value;
+    });
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = savedScale.value * e.scale;
+    })
+    .onEnd(() => {
+      savedScale.value = scale.value;
+    });
+
+  const composedGesture = Gesture.Simultaneous(
+    Gesture.Race(doubleTapGesture),
+    Gesture.Simultaneous(panGesture, pinchGesture)
+  );
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: offsetX.value },
+      { translateY: offsetY.value },
+      { scale: scale.value },
+    ],
+  }));
 
   const handleExportToPDF = async () => {
     try {
@@ -40,27 +103,31 @@ export default function PatternScreen() {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <Text className="text-2xl font-bold mb-4 capitalize text-center">
-          {isSupported
-            ? `${id.replace("-", " ")} blouse pattern`
-            : "Invalid Design"}
-        </Text>
+      <Text className="text-2xl font-bold mt-6 mb-4 capitalize text-center">
+        {isSupported
+          ? `${id.replace("-", " ")} blouse pattern`
+          : "Invalid Design"}
+      </Text>
 
-        {isSupported ? (
-          <View
+      {isSupported && (
+        <GestureDetector gesture={composedGesture}>
+          <Animated.View
             ref={patternRef}
             collapsable={false}
-            className="bg-white rounded-md overflow-hidden"
+            style={[
+              animatedStyle,
+              {
+                width,
+                height: height * 0.75,
+                backgroundColor: "#fff",
+                overflow: "hidden",
+              },
+            ]}
           >
-            <PatternSheet design={id} />
-          </View>
-        ) : (
-          <Text className="text-center text-red-500">
-            Design not supported.
-          </Text>
-        )}
-      </ScrollView>
+            <PatternSheet design={id as any} />
+          </Animated.View>
+        </GestureDetector>
+      )}
 
       {isSupported && (
         <TouchableOpacity
