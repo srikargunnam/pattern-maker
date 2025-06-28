@@ -3,12 +3,12 @@ import { Measurements } from "../types/measurements";
 
 export const measurementsAtom = atom<Measurements>({
   bust: "36",
-  waist: "30",
-  shoulder: "14",
+  waist: "32",
+  shoulder: "14.5",
   blouseLength: "14.5",
-  armhole: "7",
-  sleeveLength: "5.5",
-  neckFront: "6.5",
-  neckBack: "4",
+  armhole: "17",
+  sleeveLength: "10",
+  neckFront: "8.5",
+  neckBack: "10",
   height: "64",
 });

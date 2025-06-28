@@ -3,10 +3,8 @@ import { Dimensions } from "react-native";
 import Svg from "react-native-svg";
 import { measurementsAtom } from "../../atoms/measurements";
 import { getPatternPieceBounding } from "../../lib/getPatternPieceBounding";
-import BackBodice from "./BackBodice";
-import FrontBodice from "./FrontBodice";
+import FrontBodiceManual from "./FrontBodiceManual";
 import PatternGrid from "./PatternGrid";
-import Sleeve from "./Sleeve";
 
 const padding = 40;
 
@@ -77,7 +75,13 @@ export default function PatternSheet({ design }: { design: any }) {
       {layout.map(({ type, origin }) => {
         if (type === "front") {
           return (
-            <FrontBodice
+            // <FrontBodice
+            //   key="front"
+            //   design={design}
+            //   originX={origin.x}
+            //   originY={origin.y}
+            // />
+            <FrontBodiceManual
               key="front"
               design={design}
               originX={origin.x}
@@ -85,14 +89,14 @@ export default function PatternSheet({ design }: { design: any }) {
             />
           );
         }
-        if (type === "back") {
-          return (
-            <BackBodice key="back" originX={origin.x} originY={origin.y} />
-          );
-        }
-        if (type === "sleeve") {
-          return <Sleeve key="sleeve" originX={origin.x} originY={origin.y} />;
-        }
+        // if (type === "back") {
+        //   return (
+        //     <BackBodice key="back" originX={origin.x} originY={origin.y} />
+        //   );
+        // }
+        // if (type === "sleeve") {
+        //   return <Sleeve key="sleeve" originX={origin.x} originY={origin.y} />;
+        // }
         return null;
       })}
     </Svg>
