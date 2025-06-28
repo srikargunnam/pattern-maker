@@ -1,11 +1,14 @@
+import { measurementsAtom } from "@/atoms/measurements";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
+import { useAtomValue } from "jotai";
 import React, { useRef } from "react";
 import { Button, ScrollView, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
-import PatternSheet from "./PatternSheet";
+import { BlousePattern } from "./BlousePattern";
 
 export default function ExportPatternScreen() {
+  const measurements = useAtomValue(measurementsAtom);
   const patternRef = useRef<View>(null);
 
   const handleExportToPDF = async () => {
@@ -49,7 +52,7 @@ export default function ExportPatternScreen() {
           padding: 16,
         }}
       >
-        <PatternSheet design="boatneck" />
+        <BlousePattern measurements={measurements} />
       </View>
 
       <View style={{ marginTop: 24 }}>

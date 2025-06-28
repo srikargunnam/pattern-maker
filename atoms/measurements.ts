@@ -1,14 +1,16 @@
+import { Measurements } from "@/types";
 import { atom } from "jotai";
-import { Measurements } from "../types/measurements";
 
 export const measurementsAtom = atom<Measurements>({
-  bust: "36",
-  waist: "32",
-  shoulder: "14.5",
-  blouseLength: "14.5",
-  armhole: "17",
-  sleeveLength: "10",
-  neckFront: "8.5",
-  neckBack: "10",
-  height: "64",
+  chest: 80,
+  waist: 66,
+  fullLength: 33,
+  shoulder: 17,
+  blouseLength: 14.5,
+  armhole: 17,
+  sleeveLength: 23.5,
+  sleeveRound: 24,
+  neckFront: 8.5,
+  neckBack: 10,
+  height: 64,
 });

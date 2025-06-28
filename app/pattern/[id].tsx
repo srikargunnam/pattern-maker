@@ -5,8 +5,10 @@ import * as Sharing from "expo-sharing";
 import { useRef } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
-import PatternSheet from "../../components/patterns/PatternSheet";
 
+import { measurementsAtom } from "@/atoms/measurements";
+import { BlousePattern } from "@/components/patterns/BlousePattern";
+import { useAtomValue } from "jotai";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
@@ -17,8 +19,10 @@ const { width, height } = Dimensions.get("window");
 
 export default function PatternScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const supportedDesigns = ["boatneck", "v-neck", "square-neck", "round-neck"];
-  const isSupported = id && supportedDesigns.includes(id);
+  // const supportedDesigns = ["boatneck", "v-neck", "square-neck", "round-neck"];
+  // const isSupported = id && supportedDesigns.includes(id);
+  const isSupported = true;
+  const measurements = useAtomValue(measurementsAtom);
 
   const patternRef = useRef(null);
 
@@ -124,7 +128,7 @@ export default function PatternScreen() {
               },
             ]}
           >
-            <PatternSheet design={id as any} />
+            <BlousePattern measurements={measurements} />
           </Animated.View>
         </GestureDetector>
       )}
