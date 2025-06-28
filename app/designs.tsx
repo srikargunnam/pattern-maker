@@ -1,11 +1,11 @@
 import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-const designs = [
-  { label: "Boatneck", id: "boatneck" },
-  { label: "V-Neck", id: "v-neck" },
-  { label: "Square Neck", id: "square-neck" },
-  { label: "Round Neck", id: "round-neck" },
+const blouseStyles = [
+  { label: "Plain Blouse", id: "plain_blouse" },
+  { label: "Choli Blouse", id: "choli_blouse" },
+  { label: "Saree Blouse", id: "saree_blouse" },
+  { label: "High Neck Blouse", id: "high_neck_blouse" },
 ];
 
 export default function DesignsScreen() {
@@ -16,13 +16,14 @@ export default function DesignsScreen() {
   return (
     <ScrollView className="flex-1 bg-white px-4 pt-6">
       <Text className="text-2xl font-bold text-center mb-4">
-        Select Blouse Design
+        Select Blouse Style
       </Text>
 
       <View className="gap-4">
-        {designs.map((design) => (
+        {blouseStyles.map((design) => (
           <TouchableOpacity
             key={design.id}
+            disabled={design.id !== "plain_blouse"}
             className="bg-blue-600 py-4 px-6 rounded-xl"
             onPress={() => handleSelect(design.id)}
           >

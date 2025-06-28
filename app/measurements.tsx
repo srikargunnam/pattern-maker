@@ -13,12 +13,14 @@ import {
 import { measurementsAtom } from "../atoms/measurements";
 
 const measurementsList = [
-  { label: "Bust", key: "bust" },
+  { label: "Chest", key: "chest" },
   { label: "Waist", key: "waist" },
+  { label: "Full Length", key: "fullLength" },
   { label: "Shoulder", key: "shoulder" },
   { label: "Blouse Length", key: "blouseLength" },
   { label: "Armhole Depth", key: "armhole" },
   { label: "Sleeve Length", key: "sleeveLength" },
+  { label: "Sleeve Round", key: "sleeveRound" },
   { label: "Neck Depth (Front)", key: "neckFront" },
   { label: "Neck Depth (Back)", key: "neckBack" },
   { label: "Height", key: "height" },
@@ -27,13 +29,11 @@ const measurementsList = [
 export default function MeasurementsScreen() {
   const [measurements, setMeasurements] = useAtom(measurementsAtom);
 
-  const handleChange = (key: keyof typeof measurements, value: string) => {
+  const handleChange = (key: keyof typeof measurements, value: number) => {
     setMeasurements((prev) => ({ ...prev, [key]: value }));
   };
 
-  const isFormComplete = Object.values(measurements).every(
-    (val) => val.trim() !== ""
-  );
+  const isFormComplete = Object.values(measurements).every((val) => val !== "");
 
   const handleSave = () => {
     Alert.alert("Measurements Saved", JSON.stringify(measurements, null, 2));
@@ -61,9 +61,9 @@ export default function MeasurementsScreen() {
             <TextInput
               className="border border-gray-300 rounded-md px-4 py-2"
               keyboardType="numeric"
-              value={measurements[key as keyof typeof measurements]}
+              value={measurements[key as keyof typeof measurements].toString()}
               onChangeText={(text) =>
-                handleChange(key as keyof typeof measurements, text)
+                handleChange(key as keyof typeof measurements, Number(text))
               }
               placeholder={`Enter ${label.toLowerCase()}`}
             />
