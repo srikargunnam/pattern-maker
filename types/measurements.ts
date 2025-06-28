@@ -8,4 +8,5 @@ export type Measurements = {
   neckFront: string;
   neckBack: string;
   height: string;
+  bustPoint?: string;
 };
