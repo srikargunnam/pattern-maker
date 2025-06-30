@@ -2,13 +2,13 @@ import { Feather } from "@expo/vector-icons";
 import * as Print from "expo-print";
 import { useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
-import { useRef } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
 
 import { measurementsAtom } from "@/atoms/measurements";
-import { BlousePattern } from "@/components/patterns/BlousePattern";
+import { PatternView } from "@/components/PatternView";
 import { useAtomValue } from "jotai";
+import { useRef } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
@@ -17,7 +17,7 @@ import Animated, {
 
 const { width, height } = Dimensions.get("window");
 
-export default function PatternScreen() {
+const PatternScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   // const supportedDesigns = ["boatneck", "v-neck", "square-neck", "round-neck"];
   // const isSupported = id && supportedDesigns.includes(id);
@@ -113,26 +113,27 @@ export default function PatternScreen() {
           : "Invalid Design"}
       </Text>
 
-      {isSupported && (
-        <GestureDetector gesture={composedGesture}>
-          <Animated.View
-            ref={patternRef}
-            collapsable={false}
-            style={[
-              animatedStyle,
-              {
-                width,
-                height: height * 0.75,
-                backgroundColor: "#fff",
-                overflow: "hidden",
-              },
-            ]}
-          >
-            <BlousePattern measurements={measurements} />
-          </Animated.View>
-        </GestureDetector>
-      )}
-
+      <View className="overflow-hidden border border-black mx-2">
+        {isSupported && (
+          <GestureDetector gesture={composedGesture}>
+            <Animated.View
+              ref={patternRef}
+              collapsable={false}
+              style={[
+                animatedStyle,
+                {
+                  width,
+                  height: height * 0.75,
+                  backgroundColor: "#fff",
+                  overflow: "hidden",
+                },
+              ]}
+            >
+              <PatternView measurements={measurements} />
+            </Animated.View>
+          </GestureDetector>
+        )}
+      </View>
       {isSupported && (
         <TouchableOpacity
           onPress={handleExportToPDF}
@@ -143,4 +144,6 @@ export default function PatternScreen() {
       )}
     </View>
   );
-}
+};
+
+export default PatternScreen;
