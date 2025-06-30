@@ -2,25 +2,10 @@
 
 import { C, L, M, Q } from "@/utils/patternUtils";
 import { Measurements, PatternData, Point } from "../types";
-
-// A base class for any pattern piece
-abstract class PatternPiece {
-  readonly measurements: Measurements;
-  public data: PatternData;
-
-  constructor(measurements: Measurements) {
-    this.measurements = measurements;
-    // The data property will be filled by the subclass
-    this.data = {
-      points: {},
-      outlinePath: "",
-      dartPaths: [],
-    };
-  }
-}
+import { PatternPiece } from "./patternPiece";
 
 // --- LOGIC FOR THE FRONT BODICE ---
-export class FrontBodicePiece extends PatternPiece {
+export class Front extends PatternPiece {
   constructor(measurements: Measurements) {
     super(measurements);
     this.data = this.calculateData();
@@ -80,7 +65,7 @@ export class FrontBodicePiece extends PatternPiece {
 }
 
 // --- LOGIC FOR THE BACK BODICE ---
-export class BackBodicePiece extends PatternPiece {
+export class Back extends PatternPiece {
   constructor(measurements: Measurements) {
     super(measurements);
     this.data = this.calculateData();
