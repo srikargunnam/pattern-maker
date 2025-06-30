@@ -5,9 +5,9 @@ import { useAtomValue } from "jotai";
 import React, { useRef } from "react";
 import { Button, ScrollView, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
-import { BlousePattern } from "./BlousePattern";
+import { PatternView } from "../components/PatternView";
 
-export default function ExportPatternScreen() {
+const ExportPatternScreen = () => {
   const measurements = useAtomValue(measurementsAtom);
   const patternRef = useRef<View>(null);
 
@@ -52,7 +52,7 @@ export default function ExportPatternScreen() {
           padding: 16,
         }}
       >
-        <BlousePattern measurements={measurements} />
+        <PatternView measurements={measurements} />
       </View>
 
       <View style={{ marginTop: 24 }}>
@@ -60,4 +60,6 @@ export default function ExportPatternScreen() {
       </View>
     </ScrollView>
   );
-}
+};
+
+export default ExportPatternScreen;

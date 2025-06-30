@@ -9,7 +9,7 @@ interface Props {
   color: string;
 }
 
-export const PatternPieceView: React.FC<Props> = ({ data, color }) => {
+export const PatternPiece: React.FC<Props> = ({ data, color }) => {
   return (
     <G>
       {/* Main Outline */}
