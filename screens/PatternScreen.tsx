@@ -129,7 +129,7 @@ const PatternScreen = () => {
                 },
               ]}
             >
-              <PatternView measurements={measurements} />
+              <PatternView measurements={measurements} blouseStyle={id} />
             </Animated.View>
           </GestureDetector>
         )}

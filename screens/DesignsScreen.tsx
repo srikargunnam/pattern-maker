@@ -23,7 +23,6 @@ const DesignsScreen = () => {
         {blouseStyles.map((design) => (
           <TouchableOpacity
             key={design.id}
-            disabled={design.id !== "plain_blouse"}
             className="bg-blue-600 py-4 px-6 rounded-xl"
             onPress={() => handleSelect(design.id)}
           >

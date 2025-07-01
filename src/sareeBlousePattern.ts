@@ -10,7 +10,7 @@ export class Back extends PatternPiece {
     this.data = this.calculateData();
   }
 
-  private calculateData(): PatternData {
+  protected calculateData(): PatternData {
     const { chest, fullLength, shoulder } = this.measurements;
     const p: { [key: string]: Point } = {};
 
@@ -68,7 +68,7 @@ export class Front extends PatternPiece {
     this.data = this.calculateData();
   }
 
-  private calculateData(): PatternData {
+  protected calculateData(): PatternData {
     const { chest, fullLength, shoulder } = this.measurements;
     const p: { [key: string]: Point } = {};
 

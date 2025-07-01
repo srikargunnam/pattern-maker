@@ -1,26 +1,55 @@
 // src/components/BlousePattern.tsx
 
 import { Measurements } from "@/types";
-import React, { useMemo } from "react";
+import React from "react";
 import Svg, { G } from "react-native-svg";
-// import { BackBodicePiece, SleevePiece } from '../logic/blousePatterns'; // You would import these too
-import { Back, Front, SleevePiece } from "@/src/basicBlousePattern";
+import * as BasicBlouse from "@/src/basicBlousePattern";
+import * as SareeBlouse from "@/src/sareeBlousePattern";
 import { View } from "react-native";
-import { PatternPiece } from "./patterns/PatternPiece";
+import { PatternPiece } from "./PatternPiece";
 
 interface Props {
   measurements: Measurements;
+  blouseStyle: string;
 }
 
-export const PatternView: React.FC<Props> = ({ measurements }) => {
-  // useMemo prevents recalculating the pattern on every render
-  const frontPiece = useMemo(() => new Front(measurements), [measurements]);
+// Map blouse styles to class references
+const blousePatternMap = {
+  plain_blouse: {
+    front: BasicBlouse.Front,
+    back: BasicBlouse.Back,
+    sleeve: BasicBlouse.SleevePiece,
+  },
+  saree_blouse: {
+    front: SareeBlouse.Front,
+    back: SareeBlouse.Back,
+    sleeve: BasicBlouse.SleevePiece, // fallback to basic
+  },
+};
 
-  const backPiece = useMemo(() => new Back(measurements), [measurements]);
+type BlouseStyle = keyof typeof blousePatternMap;
 
-  const sleevePiece = useMemo(
-    () => new SleevePiece(measurements),
-    [measurements]
+export const PatternView: React.FC<Props> = ({ measurements, blouseStyle }) => {
+  const patternInfo =
+    blousePatternMap[blouseStyle as BlouseStyle] ||
+    blousePatternMap["plain_blouse"];
+  const {
+    front: FrontClass,
+    back: BackClass,
+    sleeve: SleeveClass,
+  } = patternInfo;
+
+  const frontPiece = React.useMemo(
+    () => new FrontClass(measurements),
+    [FrontClass, measurements]
+  );
+  const backPiece = React.useMemo(
+    () => new BackClass(measurements),
+    [BackClass, measurements]
+  );
+  const sleevePiece = React.useMemo(
+    () => new SleeveClass(measurements),
+    [SleeveClass, measurements]
   );
 
   console.log("mesurements", measurements);
@@ -37,7 +66,7 @@ export const PatternView: React.FC<Props> = ({ measurements }) => {
           <PatternPiece data={backPiece.data} color="lightblue" />
         </G>
 
-        {/* Render the Back Piece, offset to the side */}
+        {/* Render the Sleeve Piece, offset to the side */}
         <G x={10} y={55}>
           <PatternPiece data={sleevePiece.data} color="lightgreen" />
         </G>
