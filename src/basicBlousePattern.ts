@@ -11,7 +11,7 @@ export class Front extends PatternPiece {
     this.data = this.calculateData();
   }
 
-  private calculateData(): PatternData {
+  protected calculateData(): PatternData {
     const { chest, fullLength, shoulder } = this.measurements;
 
     // All your calculations go here, cleanly separated from any UI code
