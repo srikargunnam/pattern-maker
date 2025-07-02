@@ -1,3 +1,5 @@
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import "@/global.css";
 import {
   DarkTheme,
   DefaultTheme,
@@ -6,7 +8,6 @@ import {
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import "react-native-reanimated";
-import "../global.css";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useEffect } from "react";
@@ -29,9 +30,11 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <RootLayoutNav />
-    </GestureHandlerRootView>
+    <GluestackUIProvider mode="light">
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <RootLayoutNav />
+      </GestureHandlerRootView>
+    </GluestackUIProvider>
   );
 }
 
@@ -39,10 +42,12 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <GluestackUIProvider mode="light">
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </GluestackUIProvider>
   );
 }
