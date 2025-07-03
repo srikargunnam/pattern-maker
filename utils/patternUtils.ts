@@ -1,6 +1,4 @@
-// utils/patternUtils.ts
-
-import { Point } from "@/types";
+import { Point as PointType} from "@/types";
 import { Measurements } from "../types/measurements";
 
 export const SCALE = 10;
@@ -47,7 +45,7 @@ export function cm(value: number): number {
   return value * SCALE;
 }
 
-export const M = (point: Point) => {
+export const M = (point: PointType) => {
     return `M ${point.x},${point.y}`;
 }
 
@@ -55,7 +53,7 @@ export const L = (point: Point) => {
     return `L ${point.x},${point.y}`;
 }
 
-export function Q(p0: Point, p2: Point, b: Point, t: number) {
+export function Q(p0: PointType, p2: PointType, b: PointType, t: number) {
   // 1. Validate the 't' parameter
   if (t === 0 || t === 1) {
     throw new Error("The parameter 't' cannot be 0 or 1 for this calculation.");
@@ -70,7 +68,7 @@ export function Q(p0: Point, p2: Point, b: Point, t: number) {
   return `Q ${x1},${y1} ${p2.x},${p2.y}`;
 }
 
-export function C(p0: Point, p3: Point, a: Point, t_a: number, b: Point, t_b: number) {
+export function C(p0: PointType, p3: PointType, a: PointType, t_a: number, b: PointType, t_b: number) {
   // 1. Validate input parameters
   if (t_a <= 0 || t_a >= 1 || t_b <= 0 || t_b >= 1 || t_a === t_b) {
     throw new Error("Invalid 't' parameters. They must be unique and between 0 and 1.");
@@ -102,4 +100,18 @@ export function C(p0: Point, p3: Point, a: Point, t_a: number, b: Point, t_b: nu
   const p2_y = (c_a1 * by_prime - c_b1 * ay_prime) / denominator;
   
   return `C ${p1_x},${p1_y} ${p2_x},${p2_y} ${p3.x},${p3.y}`
+}
+
+export class Point {
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  static fromPoint(point: PointType) {
+    return new Point(point.x, point.y);
+  }
 }
