@@ -17,7 +17,7 @@ export const PatternPiece: React.FC<Props> = ({ data, color }) => {
         d={data.outlinePath}
         fill={color}
         stroke="black"
-        strokeWidth={0.3}
+        strokeWidth={0.15}
       />
 
       {/* Darts (if any) */}
@@ -25,6 +25,7 @@ export const PatternPiece: React.FC<Props> = ({ data, color }) => {
         <Path
           key={i}
           d={path}
+          fill="none"
           stroke="red"
           strokeWidth={0.15}
           strokeDasharray="0.3,0.3"
@@ -34,7 +35,7 @@ export const PatternPiece: React.FC<Props> = ({ data, color }) => {
       {/* Points and Labels */}
       {Object.entries(data.points).map(([label, point]) => (
         <React.Fragment key={label}>
-          <Circle cx={point.x} cy={point.y} r={0.5} fill="red" />
+          <Circle cx={point.x} cy={point.y} r={0.3} fill="red" />
           <SvgText x={point.x + 1} y={point.y - 1} fontSize="2" fill="black">
             {label}
           </SvgText>
