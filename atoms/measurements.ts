@@ -6,6 +6,7 @@ export const measurementsAtom = atom<Measurements>({
   waist: 66,
   fullLength: 33,
   shoulder: 17,
+  shoulderBand: 9,
   blouseLength: 14.5,
   armhole: 17,
   sleeveLength: 23.5,

@@ -2,7 +2,6 @@ import { Measurements, PatternData } from "@/types";
 import { C, L, M, Point, Q } from "@/utils/patternUtils";
 import { PatternPiece } from "./patternPiece";
 
-
 // --- LOGIC FOR THE FRONT BODICE ---
 export class Front extends PatternPiece {
   constructor(measurements: Measurements) {
@@ -11,11 +10,12 @@ export class Front extends PatternPiece {
   }
 
   protected calculateData(): PatternData {
-    const { chest, fullLength, shoulder } = this.measurements;
+    const { chest, fullLength, shoulder, neckFront, shoulderBand } =
+      this.measurements;
 
     const armholeDepth = chest / 8 + 6.5;
-    const neckWidth = chest / 12 + 1;
-    const neckDepth = chest / 10 + 1;
+    const neckWidth = shoulder - shoulderBand + 1;
+    const neckDepth = neckFront + 1;
     const shoulderPlusEase = shoulder + 1;
     const chestWidth = chest / 4;
     const chestWidthPlusEase = chestWidth + 4;
@@ -46,65 +46,67 @@ export class Front extends PatternPiece {
     const armholeCurve = Q(p[9], p[7], p[8], 0.4);
     const sideSeamCurve = Q(p[12], p[9], p[11], 0.1);
 
-    const outlinePath = M(p[3]) + neckCurve + L(p[13]) + waistCurve + sideSeamCurve + armholeCurve + L(p[3]);
+    const outlinePath =
+      M(p[3]) +
+      neckCurve +
+      L(p[13]) +
+      waistCurve +
+      sideSeamCurve +
+      armholeCurve +
+      L(p[3]);
 
     // --- DART PATH GENERATION (Based on Page 86) ---
     const dartPaths: string[] = [];
-    
+
     // Define an approximate apex point for darts to aim for
     const apexPoint = new Point(p[14].x, p[16].y);
 
     // 1. Main Waist Dart at P14 (3cm intake)
     const waistDartTip = new Point(apexPoint.x, apexPoint.y + 2);
     dartPaths.push(
-      M(new Point(p[14].x - 1.5, p[14].y)) + 
-      L(waistDartTip) + 
-      L(new Point(p[14].x + 1.5, p[14].y)) + 
-      M(new Point(waistDartTip.x, p[14].y)) +
-      L(waistDartTip)
-
+      M(new Point(p[14].x - 1.5, p[14].y)) +
+        L(waistDartTip) +
+        L(new Point(p[14].x + 1.5, p[14].y)) +
+        M(new Point(waistDartTip.x, p[14].y)) +
+        L(waistDartTip)
     );
 
     // 2. Side Dart at P15 (1.5cm intake)
     const sideDartTip = new Point(apexPoint.x - 2, apexPoint.y);
     dartPaths.push(
       M(new Point(p[15].x, p[15].y - 0.75)) +
-      L(sideDartTip) + 
-      L(new Point(p[15].x, p[15].y + 0.75)) +
-      M(new Point(p[15].x, sideDartTip.y)) +
-      L(sideDartTip)
+        L(sideDartTip) +
+        L(new Point(p[15].x, p[15].y + 0.75)) +
+        M(new Point(p[15].x, sideDartTip.y)) +
+        L(sideDartTip)
     );
-    
+
     // 3. Armhole Dart at P16 (1cm intake)
     const armholeDartTip = new Point(apexPoint.x + 2, apexPoint.y);
     dartPaths.push(
       M(new Point(p[16].x, p[16].y - 0.5)) +
-      L(armholeDartTip) +
-      L(new Point(p[16].x, p[16].y + 0.5)) +
-      M(new Point(p[16].x, armholeDartTip.y)) +
-      L(armholeDartTip)
+        L(armholeDartTip) +
+        L(new Point(p[16].x, p[16].y + 0.5)) +
+        M(new Point(p[16].x, armholeDartTip.y)) +
+        L(armholeDartTip)
     );
     // 4. Shoulder Dart at P8 (1cm intake)
     // Calculate shoulderDartTip on the line between p[8] and apexPoint using Pythagorean theorem
     const dx = apexPoint.x - p[8].x;
     const dy = apexPoint.y - p[8].y;
-    
-    const shoulderDartTip = new Point(
-      p[8].x + 0.7 * dx,
-      p[8].y + 0.7 * dy
-    );
+
+    const shoulderDartTip = new Point(p[8].x + 0.7 * dx, p[8].y + 0.7 * dy);
     dartPaths.push(
       M(new Point(p[8].x - 0.5, p[8].y)) +
-      L(shoulderDartTip) +
-      L(new Point(p[8].x + 0.5, p[8].y)) +
-      M(new Point(p[8].x, shoulderDartTip.y)) 
+        L(shoulderDartTip) +
+        L(new Point(p[8].x + 0.5, p[8].y)) +
+        M(new Point(p[8].x, shoulderDartTip.y))
     );
 
     const pointsToRemove = [10, 5, 0, 6, 11, 2, 1];
     for (const pointKey of pointsToRemove) {
       delete p[pointKey];
     }
-
 
     return { points: p, outlinePath, dartPaths };
   }
@@ -118,10 +120,12 @@ export class Back extends PatternPiece {
   }
 
   private calculateData(): PatternData {
-    const { chest, fullLength, shoulder } = this.measurements;
+    const { chest, fullLength, shoulder, neckBack, shoulderBand } =
+      this.measurements;
+
     const armholeDepth = chest / 8 + 6.5;
-    const neckWidth = chest / 12 + 1;
-    const neckDepth = 6.5;
+    const neckWidth = shoulder - shoulderBand + 1;
+    const neckDepth = neckBack + 1;
     const shoulderPlusEase = shoulder + 1;
     const chestWidth = chest / 4;
     const chestWidthPlusEase = chestWidth + 4;
@@ -148,13 +152,23 @@ export class Back extends PatternPiece {
       18: new Point(-shoulderPlusEase - 0.5, armholeDepth - 6.5),
     };
 
-
-    const neckCurve = Q(p[3], p[17], new Point(p[3].x * 0.7, p[17].y * 0.7), 0.5);
+    const neckCurve = Q(
+      p[3],
+      p[17],
+      new Point(p[3].x * 0.7, p[17].y * 0.7),
+      0.5
+    );
     const armholeCurve = Q(p[9], p[7], p[18], 0.65);
     const sideSeamCurve = Q(p[11], p[9], p[15], 0.7);
 
-
-    const outlinePath = M(p[3]) + neckCurve + L(p[2]) + L(p[11]) +  sideSeamCurve + armholeCurve + L(p[3]);
+    const outlinePath =
+      M(p[3]) +
+      neckCurve +
+      L(p[2]) +
+      L(p[11]) +
+      sideSeamCurve +
+      armholeCurve +
+      L(p[3]);
 
     // --- DART PATH GENERATION (Based on Page 86) ---
     const dartPaths: string[] = [];
@@ -163,7 +177,6 @@ export class Back extends PatternPiece {
     for (const pointKey of pointsToRemove) {
       delete p[pointKey];
     }
-
 
     return { points: p, outlinePath, dartPaths };
   }
@@ -192,7 +205,10 @@ export class SleevePiece extends PatternPiece {
     p[3] = new Point(armholeDepthLine, sleeveLength + 1);
     p[4] = new Point(armholeDepthLine, chest / 8); // Bicep width point
     p[5] = new Point(2.5, 0.3); // Back curve guide point
-    const line4_5_midpoint = new Point((p[4].x + p[5].x) / 2, (p[4].y + p[5].y) / 2);
+    const line4_5_midpoint = new Point(
+      (p[4].x + p[5].x) / 2,
+      (p[4].y + p[5].y) / 2
+    );
     p[6] = line4_5_midpoint;
     p[7] = new Point(p[6].x, p[6].y - 2); // Back curve shaper
     p[8] = new Point(p[4].x - 5, p[4].y); // Back shoulder notch (8-4 = 5cm)
@@ -204,7 +220,10 @@ export class SleevePiece extends PatternPiece {
     p[-5] = new Point(-p[5].x, p[5].y); // Front curve guide point
     p[-7] = new Point(-p[6].x, p[6].y - 2); // Back curve shaper
     // Point 9 is on the line between 8 and 5. We'll use a mirrored version for the front curve.
-    const line8m_5m_midpoint = new Point((p[-8].x + p[-5].x) / 2, (p[-8].y + p[-5].y) / 2);
+    const line8m_5m_midpoint = new Point(
+      (p[-8].x + p[-5].x) / 2,
+      (p[-8].y + p[-5].y) / 2
+    );
     p[-9] = line8m_5m_midpoint;
     p[-10] = new Point(-p[10].x, p[10].y); // Front hem corner
 
@@ -217,7 +236,6 @@ export class SleevePiece extends PatternPiece {
       Q(p[-5], p[-4], p[-7], 0.5) +
       L(p[-10]) +
       L(p[10]);
-
 
     const pointsToRemove = [1, 3, 6, 7, -8, -9];
     for (const pointKey of pointsToRemove) {

@@ -19,6 +19,7 @@ const measurementsList = [
   { label: "Waist", key: "waist" },
   { label: "Full Length", key: "fullLength" },
   { label: "Shoulder", key: "shoulder" },
+  { label: "Shoulder Band Width", key: "shoulderBand" },
   { label: "Blouse Length", key: "blouseLength" },
   { label: "Armhole Depth", key: "armhole" },
   { label: "Sleeve Length", key: "sleeveLength" },
@@ -61,14 +62,18 @@ const MeasurementsScreen = () => {
           </Text>
           <View className="flex-row gap-2 bg-gray-100 rounded-md p-2">
             <Pressable
-              className={`w-10 ${unit === "cm" ? "bg-blue-500" : "bg-gray-200"} rounded-sm`}
+              className={`w-10 ${
+                unit === "cm" ? "bg-blue-500" : "bg-gray-200"
+              } rounded-sm`}
               onPress={() => setUnit("cm")}
               disabled={unit === "cm"}
             >
               <Text className="text-center text-white font-bold">cm</Text>
             </Pressable>
             <Pressable
-              className={`w-10 ${unit === "in" ? "bg-blue-500" : "bg-gray-200"} rounded-sm`}
+              className={`w-10 ${
+                unit === "in" ? "bg-blue-500" : "bg-gray-200"
+              } rounded-sm`}
               onPress={() => setUnit("in")}
               disabled={unit === "in"}
             >
