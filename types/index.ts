@@ -8,6 +8,7 @@ export interface Measurements {
   waist: number;
   fullLength: number;
   shoulder: number;
+  shoulderBand: number;
   blouseLength: number;
   armhole: number;
   sleeveLength: number;

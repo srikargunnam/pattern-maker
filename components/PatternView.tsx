@@ -1,11 +1,11 @@
 // src/components/BlousePattern.tsx
 
-import { Measurements } from "@/types";
-import React from "react";
-import Svg, { G } from "react-native-svg";
 import * as BasicBlouse from "@/src/basicBlousePattern";
 import * as SareeBlouse from "@/src/sareeBlousePattern";
+import { Measurements } from "@/types";
+import React from "react";
 import { View } from "react-native";
+import Svg, { G, Rect, Text } from "react-native-svg";
 import { PatternPiece } from "./PatternPiece";
 
 interface Props {
@@ -55,20 +55,29 @@ export const PatternView: React.FC<Props> = ({ measurements, blouseStyle }) => {
   console.log("mesurements", measurements);
   return (
     <View className="h-full">
-      <Svg viewBox="-30 0 80 40" width="100%" height="100%">
-        {/* Render the Front Piece */}
-        <G>
-          <PatternPiece data={frontPiece.data} color="lightpink" />
-        </G>
-
+      <Svg viewBox="-30 10 80 40" width="100%" height="100%">
         {/* Render the Back Piece, offset to the side */}
         <G x={35}>
           <PatternPiece data={backPiece.data} color="lightblue" />
         </G>
 
+        {/* Render the Front Piece */}
+        <G x={0}>
+          <PatternPiece data={frontPiece.data} color="lightpink" />
+        </G>
+
         {/* Render the Sleeve Piece, offset to the side */}
         <G x={10} y={55}>
           <PatternPiece data={sleevePiece.data} color="lightgreen" />
+        </G>
+
+        {/* Scale bar: 5 cm (assuming 10 units = 1 cm, so 50 units = 5 cm) */}
+        <G x={-25} y={47}>
+          {/* Adjust position as needed */}
+          <Rect x={0} y={0} width={50} height={1} fill="black" />
+          <Text x={25} y={-2} fontSize={2} textAnchor="middle" fill="black">
+            5 cm
+          </Text>
         </G>
       </Svg>
     </View>

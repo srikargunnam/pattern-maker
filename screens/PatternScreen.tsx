@@ -83,15 +83,16 @@ const PatternScreen = () => {
 
   const handleExportToPDF = async () => {
     try {
-      const imageUri = await captureRef(patternRef, {
+      const imageBase64 = await captureRef(patternRef, {
         format: "png",
         quality: 1,
+        result: "base64", // Use base64 result
       });
 
       const html = `
         <html>
           <body style="margin:0;padding:0;">
-            <img src="${imageUri}" style="width:100%;" />
+            <img src="data:image/png;base64,${imageBase64}" style="width:100%;" />
           </body>
         </html>
       `;
